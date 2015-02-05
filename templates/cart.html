@@ -2,11 +2,11 @@
 {% block body %}
 <table class="table table-striped">
     <tr><th>Melon Name</th><th>Quantity</th><th>Price</th><th>Total</th></tr>
-    {%for melon, qty in current_cart%}
-    <tr><td>{{ melon.common_name }}</td><td>{{qty}}</td><td>{{ melon.price }}</td><td>{{ melon.price * qty}} </td></tr>
+    {%for melon, qty, subtotal in current_cart%}
+    <tr><td>{{ melon.common_name }}</td><td>{{qty}}</td><td>{{ melon.price_str() }}</td><td>{{ subtotal }} </td></tr>
     {% endfor %}
     
 </table>
-<h3>Total: $27.00</h3>
+<h3>{{ total }}</h3>
 <a href="/checkout" class="btn btn-large btn-primary">Check Out</a>
 {% endblock %}

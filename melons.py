@@ -36,20 +36,25 @@ def shopping_cart():
     if session.get('cart') == None:
         session['cart'] = {}
         current_cart = []
-        return render_template("cart.html", current_cart=current_cart)
+        total = 0.00
+        return render_template("cart.html", current_cart=current_cart, total=total)
     else:
         current_cart = []
         melon_ids = session['cart'].keys()
         for melon_id in melon_ids:
             temp_melon = model.get_melon_by_id(melon_id)
             temp_quantity = session['cart'][melon_id]
-            current_cart.append((temp_melon, temp_quantity))
+            temp_melon_total = temp_melon.price * temp_quantity
+            temp_melon_total = "$%.2f" % temp_melon_total
+            current_cart.append((temp_melon, temp_quantity, temp_melon_total))
 
             print current_cart
         total = 0
         for tup in current_cart:
-            total = total + tup[0].price * int(tup[1])
-        return render_template("cart.html", current_cart=current_cart)
+            total = total + tup[0].price * float(tup[1])
+        total = float(total)
+        pretty_total = "$%.2f" %total
+        return render_template("cart.html", current_cart=current_cart, total=pretty_total)
 
 @app.route("/add_to_cart/<int:id>")
 def add_to_cart(id):
