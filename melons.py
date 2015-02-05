@@ -46,6 +46,9 @@ def shopping_cart():
             current_cart.append((temp_melon, temp_quantity))
 
             print current_cart
+        total = 0
+        for tup in current_cart:
+            total = total + tup[0].price * int(tup[1])
         return render_template("cart.html", current_cart=current_cart)
 
 @app.route("/add_to_cart/<int:id>")
