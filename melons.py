@@ -35,9 +35,11 @@ def shopping_cart():
     accompanying screenshots for details."""
     current_cart = []
     for id in session['cart']:
-        temp_list = model.get_melon_by_id(id)
-        current_cart.append((temp_list[2], temp_list[3]))
-    return render_template("cart.html", cart=current_cart)
+        temp_melon = model.get_melon_by_id(id)
+        print temp_melon
+        current_cart.append(temp_melon)
+    print current_cart
+    return render_template("cart.html", current_cart=current_cart)
 
 @app.route("/add_to_cart/<int:id>")
 def add_to_cart(id):
@@ -54,7 +56,9 @@ def add_to_cart(id):
         session['cart'].append(id)
         flash("Successfully added to cart") 
 
-    return render_template("cart.html")
+    print session
+
+    return redirect("/cart")
 
 
 @app.route("/login", methods=["GET"])

@@ -2,8 +2,8 @@
 {% block body %}
 <table class="table table-striped">
     <tr><th>Melon Name</th><th>Quantity</th><th>Price</th><th>Total</th></tr>
-    {%for name, price in cart %}
-    <tr><td>{{ name }}</td><td>1</td><td>{{ price }}</td><td>{{ price }} * 1</td></tr>
+    {%for melon in current_cart%}
+    <tr><td>{{ melon.common_name }}</td><td>1</td><td>{{ melon.price }}</td><td>{{ melon.price * 1}} </td></tr>
     {% endfor %}
     
 </table>
