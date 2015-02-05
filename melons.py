@@ -33,13 +33,20 @@ def shopping_cart():
     """TODO: Display the contents of the shopping cart. The shopping cart is a
     list held in the session that contains all the melons to be added. Check
     accompanying screenshots for details."""
-    current_cart = []
-    for id in session['cart']:
-        temp_melon = model.get_melon_by_id(id)
-        print temp_melon
-        current_cart.append(temp_melon)
-    print current_cart
-    return render_template("cart.html", current_cart=current_cart)
+    if session.get('cart') == None:
+        session['cart'] = {}
+        current_cart = []
+        return render_template("cart.html", current_cart=current_cart)
+    else:
+        current_cart = []
+        melon_ids = session['cart'].keys()
+        for melon_id in melon_ids:
+            temp_melon = model.get_melon_by_id(melon_id)
+            temp_quantity = session['cart'][melon_id]
+            current_cart.append((temp_melon, temp_quantity))
+
+            print current_cart
+        return render_template("cart.html", current_cart=current_cart)
 
 @app.route("/add_to_cart/<int:id>")
 def add_to_cart(id):
@@ -50,13 +57,13 @@ def add_to_cart(id):
     # Intended behavior: when a melon is added to a cart, redirect them to the
     # shopping cart page, while displaying the message"""
     if session.get('cart') == None:
-        session['cart'] = [id]
+        session['cart'] = {str(id): 1}
         flash("Successfully added to cart") 
     else:
-        session['cart'].append(id)
-        flash("Successfully added to cart") 
+        session['cart'][str(id)] = session['cart'].get(str(id), 0) + 1
+        flash("successfully added to cart")
 
-    print session
+    print session['cart']
 
     return redirect("/cart")
 
