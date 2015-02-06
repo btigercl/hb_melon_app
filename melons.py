@@ -78,6 +78,9 @@ def add_to_cart(id):
 
 @app.route("/login", methods=["GET"])
 def show_login():
+    if session.get('email') != None:
+        session.clear()
+        flash("Successfully logged out!")     
     return render_template("login.html")
 
 
@@ -85,7 +88,17 @@ def show_login():
 def process_login():
     """TODO: Receive the user's login credentials located in the 'request.form'
     dictionary, look up the user, and store them in the session."""
-    return "Oops! This needs to be implemented"
+    email = request.form.get("email")
+    password = request.form.get("password")
+    if model.get_customer_by_email(email) == None:
+        flash("Please contact ubermelon to sign up!")
+    else:
+        session['email'] = model.get_customer_by_email(email).email
+        print session['email']
+        flash("Successfully logged in!")
+    
+
+    return redirect("/melons")
 
 
 @app.route("/checkout")
